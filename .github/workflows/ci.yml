@@ -2,10 +2,10 @@ name: Testing
 on:
   pull_request:
     branches:
-      - main
+      - master
   push:
     branches:
-      - main
+      - master
 jobs:
   build:
     name: Pytest Python ${{ matrix.python-version }} - ${{ matrix.os }} - ${{ github.event_name }}
