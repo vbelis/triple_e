@@ -4,8 +4,6 @@
 import numpy as np
 from qiskit.quantum_info import state_fidelity
 
-from icecream import ic
-
 # number of threads to use
 #import os
 #os.environ['OMP_NUM_THREADS'] = '2'
