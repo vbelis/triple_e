@@ -8,6 +8,7 @@ from qiskit.quantum_info import state_fidelity
 #import os
 #os.environ['OMP_NUM_THREADS'] = '2'
 
+
 def expressibility(circuit_simulator,
                    n_params,
                    n_qubits,
@@ -32,7 +33,7 @@ def expressibility(circuit_simulator,
         np.random.seed(seed)
 
     if n_bins is None:
-        n_bins = 75 # as used in the paper
+        n_bins = 75  # as used in the paper
 
     # estimate fidelities
     fidelities = []
