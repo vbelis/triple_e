@@ -4,12 +4,11 @@
 import numpy as np
 from qiskit.quantum_info import partial_trace, DensityMatrix, Statevector
 
-from icecream import ic
 
 def entanglement_capability(circuit_simulator,
-                   n_params,
-                   n_shots=1000,
-                   seed=None):
+                            n_params,
+                            n_shots=1000,
+                            seed=None):
     """Computes expressibility for a circuit.
 
     Args:
@@ -36,39 +35,70 @@ def entanglement_capability(circuit_simulator,
     return np.mean(np.array(entanglements))
 
 
-def entanglement_measure(density_matrix):
+def cast_to_statevector(state):
+    if isinstance(state, Statevector):
+        return state
+    try:
+        state = Statevector(state)
+        return state
+    except Exception:
+        try:
+            state = DensityMatrix(state)
+            return state.to_statevector()
+        except Exception:
+            raise TypeError(
+                f"Expected state of type {Statevector} or convertable to {Statevector}, but received {type(state)} instead."
+            )
+
+
+def entanglement_measure(rho):
     """Calculates Meyer and Wallach's entanglement measure Q.
 
     See https://arxiv.org/abs/quant-ph/0108104 for more.
 
     Args:
-        density_matrix: qiskit DensityMatrix or Statevecrepresentation of the state to
+        rho: qiskit Statevector (or convertable) representation of the state to
             calculate Q of.
-    
+
     Returns:
         Q_value: The Meyer-Wallach entanglement measure of density_matrix.
     """
-    if not isinstance(density_matrix, DensityMatrix):
-        try:
-            density_matrix = DensityMatrix(density_matrix)
-        except Exception:
-            raise TypeError(f"Expected density_matrix of type {DensityMatrix} or convertable to {DensityMatrix}, but received {type(density_matrix)} instead.")
 
-    n_qubits = density_matrix.num_qubits
-
+    rho = cast_to_statevector(rho)
+    n_qubits = rho.num_qubits
     entanglement_sum = 0
 
-    # Using Brennen's form of the MW-measure
-    # https://arxiv.org/abs/quant-ph/0305094
+    rho_data = rho.data
     for k in range(n_qubits):
-        rho_k = partial_trace(density_matrix, [k]).data
-        rho_k_squared = rho_k**2
-        entanglement_sum += rho_k_squared.trace()
-    Q_value = 2 * (1 - entanglement_sum.real / n_qubits)
+        # Elements of the statevector for which the kth qubit is 0/1 respectively
+        k_zero_mask = (0 == np.arange(2**n_qubits) // 2**k % 2)
+        k_one_mask = (1 == np.arange(2**n_qubits) // 2**k % 2)
 
-    # numerically a bit troublesome so we must clamp
-    if Q_value < 0:
-        return 0
-    elif Q_value > 1:
-        return 1
-    return Q_value
+        rho_k_zero = rho_data[k_zero_mask]
+        rho_k_one = rho_data[k_one_mask]
+
+        entanglement_sum += wedge_distance(rho_k_zero, rho_k_one)
+
+    return 4 / n_qubits * entanglement_sum
+
+
+def wedge_distance(u, v):
+    """Calculates the wedge distance between input vectors u and v.
+
+    Args:
+        u: Vector 1
+        v: Vector 2
+
+    Returns:
+        Wedge product of u and v.
+    
+    Remarks:
+        Could be more efficient, but realistically speaking this function is
+        not the bottleneck of the entanglement capability calculation.
+    """
+    n_it = np.size(u)
+    sum = 0
+    for i in range(1, n_it):
+        for j in range(i):
+            sum += (u[i] * v[j] - u[j] * v[i])**2
+    return sum
