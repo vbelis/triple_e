@@ -1,3 +1,4 @@
 #from .effective_dimension import effective_dimension
 from .expressibility import expressibility
 from .entanglement_capability import entanglement_capability
+from .effective_dimension import empirical_fisher
