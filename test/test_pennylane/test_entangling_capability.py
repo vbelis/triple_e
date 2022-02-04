@@ -1,8 +1,6 @@
 from triple_e import entanglement_capability
 
 import pennylane as qml
-from qiskit.quantum_info import DensityMatrix
-import numpy as np
 
 import pytest
 
