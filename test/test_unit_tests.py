@@ -5,7 +5,7 @@ from math import comb
 
 import pytest
 
-from triple_e.effective_dimension import normalised_fisher
+from triple_e.effective_dimension import effective_dimension_, normalised_fisher
 
 
 def test_single_binomial():
@@ -135,7 +135,7 @@ def test_effective_dimension():
         p_all.append(p)
         dp_all.append(dp)
 
-    result = normalised_fisher(np.array(p_all), np.array(dp_all))
-    result = 1 / M * np.trace(np.sum(result, axis=0))
+    result = effective_dimension_(np.array(p_all), np.array(dp_all), 1)
+    assert isinstance(result, float)
 
-    assert type(result) == float
+# TODO: Test against something where we know the value.
