@@ -128,7 +128,7 @@ def normalised_fisher(p, dp):
 
 
 def effective_dimension_(p, dp, gamma):
-    """Calculates the effective dimension of some distribution.
+    r"""Calculates the effective dimension of some distribution.
 
     For some distribution p, some M different d-dimensional vector of distribution
     parameters theta, this function calculates the effective dimension over k
@@ -157,9 +157,11 @@ def effective_dimension_(p, dp, gamma):
     
     Remarks:
         Mathematically speaking, this function calculates
-        E = 2 \frac{\log \left( \sum_{m=1}^M \sqrt{D_m} \right) - \log M}{\log \left[ \frac{\gamma k}{2 \pi \log k} \right]}
+        .. math::
+            E = 2 \frac{\log \left( \sum_{m=1}^M \sqrt{D_m} \right) - \log M}{\log \left[ \frac{\gamma k}{2 \pi \log k} \right]}
         where D_m
-        D_m = \det \left[\mathbb{I}_d + \frac{\gamma k}{2 \pi \log k} \hat{F}(m) \right]
+        .. math::
+            D_m = \det \left[\mathbb{I}_d + \frac{\gamma k}{2 \pi \log k} \hat{F}(m) \right]
         which is a discretized version of Eq. (2) in Abbas et al.
     """
     M = p.shape[0]

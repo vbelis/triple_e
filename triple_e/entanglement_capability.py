@@ -9,14 +9,13 @@ def entanglement_capability(circuit_simulator,
                             n_params,
                             n_shots=1000,
                             seed=None):
-    """Computes expressibility for a circuit.
+    """Computes entanglement capability for a circuit.
 
     Args:
         circuit_simulator: A function that takes n_params and returns a qiskit
             Statevector or DensityMatrix.
         n_params: The number of parameters circuit_simulator accepts. Presumed
             to be uniformly distributed in [0, 2pi]
-        n_qubits: Number of qubits of the circuit.
         n_shots: How often the simulation should be repeated.
 
     Returns:
