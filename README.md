@@ -14,6 +14,7 @@ Pennylane:
 ```python
 from triple_e import expressibility
 import pennylane as qml
+
 # define a parameterized circuit, returning a DensityMatrix/Statevector
 def circuit_a(params):
     qml.Hadamard(wires=0)
@@ -37,6 +38,7 @@ Qiskit:
 from triple_e import expressibility
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
+
 # define a parameterized circuit, returning a DensityMatrix/Statevector
 def circuit_b(weights):
     qc = QuantumCircuit(1)
@@ -58,6 +60,7 @@ Pennylane:
 ```python
 from triple_e import entanglement_capability
 import pennylane as qml
+
 # define a parameterized circuit, returning a DensityMatrix/Statevector
 def separable_circuit(params):
     qml.U3(*params[:3], wires=0)
