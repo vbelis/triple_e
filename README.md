@@ -5,11 +5,17 @@ Metrics for Variational Quantum Circuits/Parameterized Quantum Circuits/Quantum 
 - Entanglement Capability [[1]](#1)
 - Effective Dimension [[2]](#2)
 
+## Installation
+
+Simply install this package from GitHub/`master` by running
+
+`pip install https://github.com/till-m/triple_e/archive/master.zip`.
+
 ## Usage
 This package aims to support both [Qiskit](https://qiskit.org/) and [PennyLane](https://pennylane.ai/).
 
 ### Expressibility
-Pennylane:
+PennyLane:
 
 ```python
 from triple_e import expressibility
@@ -55,7 +61,7 @@ expressibility(circuit_b, n_params, n_wires, n_shots)
 ```
 
 ### Entanglement Capability
-Pennylane:
+PennyLane:
 
 ```python
 from triple_e import entanglement_capability
