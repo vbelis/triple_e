@@ -7,7 +7,7 @@ import pytest
 
 # Check against 1-qubit examples from paper
 def two_qubit_entangling(circuit, n_params, n_shots):
-    dev = qml.device('default.qubit', wires=2)
+    dev = qml.device('lightning.qubit', wires=2)
     qnode = qml.QNode(circuit, dev)
     return entanglement_capability(qnode, n_params, n_shots=n_shots)
 

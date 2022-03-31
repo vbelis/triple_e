@@ -2,7 +2,7 @@
 # based on: https://arxiv.org/abs/1905.10876
 
 import numpy as np
-from qiskit.quantum_info import partial_trace, DensityMatrix, Statevector
+from qiskit.quantum_info import DensityMatrix, Statevector
 
 
 def entanglement_capability(circuit_simulator,
@@ -23,6 +23,7 @@ def entanglement_capability(circuit_simulator,
     """
     if seed is not None:
         np.random.seed(seed)
+    n_shots = int(n_shots)
 
     # estimate fidelities
     entanglements = []

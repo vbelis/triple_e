@@ -7,7 +7,7 @@ import pytest
 
 # Check against 1-qubit examples from paper
 def one_qubit_expr(circuit, n_params, n_shots):
-    dev = qml.device('default.qubit', wires=1)
+    dev = qml.device('lightning.qubit', wires=1)
     qnode = qml.QNode(circuit, dev)
     return expressibility(qnode, n_params, 1, n_shots=n_shots)
 

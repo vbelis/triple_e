@@ -34,6 +34,7 @@ def expressibility(circuit_simulator,
 
     if n_bins is None:
         n_bins = 75  # as used in the paper
+    n_shots = int(n_shots)
 
     # estimate fidelities
     fidelities = []

@@ -111,17 +111,11 @@ def normalised_fisher(p, dp):
     Returns:
         np.ndarray of shape (M, d, d), where the m-th entry is the (d, d)
         normalised empirical fisher information matrix associated with theta_m.
-
-    Remarks:
-        Bad convergence behaviour, expect high uncertainty.
-        This is a wrapper around empirical_fisher_ to allow for calculation
-        over different parameter sets.
     """
     M = p.shape[0]
     d = dp.shape[2]
 
     all_fishers = empirical_fisher(p, dp)
-    print(all_fishers.shape)
     fisher_trace = np.trace(np.sum(all_fishers, axis=0))
     normalisation = d * M / fisher_trace
     return normalisation * all_fishers
