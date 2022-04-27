@@ -8,8 +8,8 @@ from qiskit.quantum_info import state_fidelity
 def expressibility(circuit_simulator,
                    n_params,
                    n_qubits,
-                   method="pairwise",
                    n_shots=1000,
+                   method="pairwise",
                    seed=None,
                    n_bins=75,
                    return_histogram=False,
@@ -22,13 +22,13 @@ def expressibility(circuit_simulator,
         n_params: The number of parameters circuit_simulator accepts. Presumed
             to be uniformly distributed in [0, 2pi]
         n_qubits: Number of qubits of the circuit.
+        n_shots: How many fidelity samples to generate.
         method: Method to use to estimate fidelity:
             "pairwise": Generates two samples, calculates their fidelity.
                 Computationally expensive, but memory efficient.
             "full": Generates approximately sqrt(n_shots) samples, calculates
                 their fidelity pairwise. Computationally efficient, but memory
                 expensive.
-        n_shots: How many fidelity samples to generate.
         n_bins: Number of equal-width bins.
         return_histogram: If `True`, additionally returns a tuple
             `(p_haar, p_circuit)`containing the normalized histogram data of the fidelity
