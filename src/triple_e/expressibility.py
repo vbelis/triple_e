@@ -3,6 +3,7 @@
 
 import numpy as np
 from qiskit.quantum_info import state_fidelity
+from warnings import warn
 
 
 def expressibility(circuit_simulator,
@@ -70,14 +71,12 @@ def expressibility(circuit_simulator,
         raise ValueError("Invalid argument for method provided.")
 
     # Convert fidelities to a histogram
-    binning = np.linspace(0, 1, n_bins + 1)
-    bin_centers = np.array([(binning[i + 1] + binning[i]) / 2
-                            for i in range(n_bins)])
-    fids, _ = np.histogram(fidelities, bins=binning)
-    fids = (fids / n_shots)  # normalize the histogram
+    fids, bin_edges = np.histogram(fidelities, bins=n_bins, range=(0, 1))
+    fids = (fids / sum(fids))  # normalize the histogram
 
     # Compute P_haar(F)
-    P_haar = (2**n_qubits - 1) * (1 - bin_centers)**(2**n_qubits - 2)
+    CDF_haar = -(1 - bin_edges)**(2**n_qubits - 1)
+    P_haar = np.array([CDF_haar[i + 1] - CDF_haar[i] for i in range(n_bins)])
     P_haar = P_haar / sum(P_haar)  # normalize
 
     # Compute Kullback-Leibler (KL) Divergence
@@ -86,6 +85,10 @@ def expressibility(circuit_simulator,
         value = fids[i]
         if (value > epstol) and (P_haar[i] > 0):
             D_kl += value * np.log(value / P_haar[i])
+        elif value > 0:
+            warn(
+                "Dropping bin from calculation due to floating point accuracy. KL-divergence may be underestimated."
+            )
 
     if return_histogram:
         return D_kl, (P_haar, fids)
