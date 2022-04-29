@@ -84,7 +84,7 @@ def expressibility(circuit_simulator,
     D_kl = 0
     for i in range(n_bins):
         value = fids[i]
-        if (value > epstol) and (P_haar[i] > epstol):
+        if (value > epstol) and (P_haar[i] > 0):
             D_kl += value * np.log(value / P_haar[i])
 
     if return_histogram:
