@@ -100,5 +100,5 @@ def wedge_distance(u, v):
     sum = 0
     for i in range(1, n_it):
         for j in range(i):
-            sum += (u[i] * v[j] - u[j] * v[i])**2
+            sum += np.abs(u[i] * v[j] - u[j] * v[i])**2
     return sum
