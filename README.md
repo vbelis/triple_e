@@ -7,9 +7,9 @@ Metrics for Variational Quantum Circuits/Parameterized Quantum Circuits/Quantum 
 
 ## Installation
 
-Simply install this package from GitHub/`master` by running
+Simply install this package from GitHub/`master` by running:
 
-`pip install https://github.com/till-m/triple_e/archive/master.zip`.
+```pip install https://github.com/till-m/triple_e/archive/master.zip```
 
 ## Usage
 This package aims to support both [Qiskit](https://qiskit.org/) and [PennyLane](https://pennylane.ai/).
@@ -27,7 +27,6 @@ def circuit_a(params):
     qml.RZ(params[0], wires=0)
     return qml.density_matrix(0)
 
-n_wires = 1
 n_params = 1
 n_shots = 1000
 
@@ -35,7 +34,7 @@ n_shots = 1000
 dev = qml.device('default.qubit', wires=1)
 qnode = qml.QNode(circuit_a, dev)
 
-expressibility(qnode, n_params, n_wires, n_shots)
+expressibility(qnode, n_params, n_shots)
 ```
 
 Qiskit:
@@ -53,11 +52,10 @@ def circuit_b(weights):
     qc.rx(weights[1], 0)
     return Statevector.from_instruction(qc)
 
-n_wires = 1
 n_params = 2
 n_shots = 1000
 
-expressibility(circuit_b, n_params, n_wires, n_shots)
+expressibility(circuit_b, n_params, n_shots)
 ```
 
 ### Entanglement Capability
@@ -73,15 +71,14 @@ def separable_circuit(params):
     qml.U3(*params[3:], wires=1)
     return qml.density_matrix([0, 1])
 
-n_wires = 2
 n_params = 6
 n_shots = 10
 
 # set up a quantum device with the appropriate amount of qubits/wires
-dev = qml.device('default.qubit', wires=n_wires)
+dev = qml.device('default.qubit', wires=2)
 qnode = qml.QNode(separable_circuit, dev)
 
-entanglement_capability(qnode, n_params, n_wires, n_shots)
+entanglement_capability(qnode, n_params, n_shots)
 ```
 
 Qiskit:
@@ -107,8 +104,8 @@ n_shots = 10
 entanglement_capability(GHZ4_circuit, n_params, n_shots)
 ```
 
-## Acknowledgements
-Expressibility and entanglement capability calculation is partially based on code by Cenk Tüysüz.
+## Credits
+Developed by Till Muser at the Trapped Ion Quantum Information Group of ETH Zürich. Expressibility and entanglement capability calculation is partially based on code by Cenk Tüysüz.
 
 
 ## References
