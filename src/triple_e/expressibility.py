@@ -2,13 +2,13 @@
 # based on: https://arxiv.org/abs/1905.10876
 
 import numpy as np
-from qiskit.quantum_info import state_fidelity
+from qiskit.quantum_info import state_fidelity, DensityMatrix
 from warnings import warn
 
 
 def expressibility(circuit_simulator,
                    n_params,
-                   n_qubits,
+                   n_qubits=None,
                    n_shots=1000,
                    method="pairwise",
                    seed=None,
@@ -22,7 +22,7 @@ def expressibility(circuit_simulator,
             Statevector or DensityMatrix.
         n_params: The number of parameters circuit_simulator accepts. Presumed
             to be uniformly distributed in [0, 2pi]
-        n_qubits: Number of qubits of the circuit.
+        n_qubits: *DEPRECATED* Number of qubits of the circuit. 
         n_shots: How many fidelity samples to generate.
         method: Method to use to estimate fidelity:
             "pairwise": Generates two samples, calculates their fidelity.
@@ -60,15 +60,23 @@ def expressibility(circuit_simulator,
         samples = []
         while len(fidelities) < n_shots:
             params = np.random.rand(n_params) * 2 * np.pi
-            rho = circuit_simulator(params)
+            rho1 = circuit_simulator(params)
 
             for smpl in samples:
-                fidelities.append(state_fidelity(rho, smpl))
+                fidelities.append(state_fidelity(rho1, smpl))
                 if len(fidelities) >= n_shots:
                     break
-            samples.append(rho)
+            samples.append(rho1)
     else:
         raise ValueError("Invalid argument for method provided.")
+
+    if n_qubits is not None: #TODO: Actually remove this in the future ;)
+        warn(
+            "Supplying `n_qubits` manually is deprecated and will be removed" +
+            " in the future. The supplied value is ignored, and the correct" +
+            " value is inferred from the state returned by `circuit_simulator`"
+            + " instead.", DeprecationWarning)
+    n_qubits = DensityMatrix(rho1).num_qubits
 
     # Convert fidelities to a histogram
     fids, bin_edges = np.histogram(fidelities, bins=n_bins, range=(0, 1))
@@ -87,8 +95,8 @@ def expressibility(circuit_simulator,
             D_kl += value * np.log(value / P_haar[i])
         elif value > 0:
             warn(
-                "Dropping bin from calculation due to floating point accuracy. KL-divergence may be underestimated."
-            )
+                "Dropping bin from calculation due to floating point accuracy."
+                + " KL-divergence may be underestimated.")
 
     if return_histogram:
         return D_kl, (P_haar, fids)
