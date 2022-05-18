@@ -9,7 +9,7 @@ import pytest
 def one_qubit_expr(circuit, n_params, n_shots):
     dev = qml.device('lightning.qubit', wires=1)
     qnode = qml.QNode(circuit, dev)
-    return expressibility(qnode, n_params, 1, n_shots=n_shots)
+    return expressibility(qnode, n_params, n_shots=n_shots)
 
 
 def test_expressibility_single_qubit_idle():
@@ -63,6 +63,7 @@ def test_expressibility_full_method():
     dev = qml.device('lightning.qubit', wires=1)
     qnode = qml.QNode(circuit_c, dev)
 
-    assert expressibility(qnode, 3, 1, n_shots=1000,
-                          method="pairwise") == pytest.approx(expressibility(qnode, 3, 1, n_shots=1000,
-                          method="full"), abs=0.1)
+    assert expressibility(qnode, 3, n_shots=1000,
+                          method="pairwise") == pytest.approx(expressibility(
+                              qnode, 3, 1, n_shots=1000, method="full"),
+                                                              abs=0.1)

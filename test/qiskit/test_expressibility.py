@@ -15,7 +15,7 @@ def test_expressibility_single_qubit_idle():
         qc.id(0)
         return Statevector.from_instruction(qc)
 
-    assert expressibility(idle_circuit, 1, 1,
+    assert expressibility(idle_circuit, 1,
                           n_shots=1000) == pytest.approx(4.30, abs=0.1)
 
 
@@ -27,8 +27,8 @@ def test_expressibility_single_qubit_a():
         qc.rz(weights[0], 0)
         return Statevector.from_instruction(qc)
 
-    assert expressibility(circuit_a, 1, 1,
-                          n_shots=1000) == pytest.approx(0.22, abs=0.1)
+    assert expressibility(circuit_a, 1, n_shots=1000) == pytest.approx(0.22,
+                                                                       abs=0.1)
 
 
 def test_expressibility_single_qubit_b():
@@ -40,8 +40,8 @@ def test_expressibility_single_qubit_b():
         qc.rx(weights[1], 0)
         return Statevector.from_instruction(qc)
 
-    assert expressibility(circuit_b, 2, 1,
-                          n_shots=1000) == pytest.approx(0.02, abs=0.1)
+    assert expressibility(circuit_b, 2, n_shots=1000) == pytest.approx(0.02,
+                                                                       abs=0.1)
 
 
 def test_expressibility_single_qubit_c():
@@ -52,8 +52,8 @@ def test_expressibility_single_qubit_c():
         qc.u(*weights, 0)
         return Statevector.from_instruction(qc)
 
-    assert expressibility(circuit_c, 3, 1,
-                          n_shots=1000) == pytest.approx(0.007, abs=0.1)
+    assert expressibility(circuit_c, 3, n_shots=1000) == pytest.approx(0.007,
+                                                                       abs=0.1)
 
 
 def test_expressibility_full_method():
@@ -64,7 +64,7 @@ def test_expressibility_full_method():
         qc.u(*weights, 0)
         return Statevector.from_instruction(qc)
 
-    assert expressibility(circuit_c, 3, 1, n_shots=1000,
+    assert expressibility(circuit_c, 3, n_shots=1000,
                           method="pairwise") == pytest.approx(expressibility(
-                              circuit_c, 3, 1, n_shots=1000, method="full"),
+                              circuit_c, 3, n_shots=1000, method="full"),
                                                               abs=0.1)
