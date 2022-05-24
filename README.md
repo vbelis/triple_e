@@ -105,7 +105,7 @@ entanglement_capability(GHZ4_circuit, n_params, n_shots)
 ```
 
 ## Credits
-Developed by Till Muser at the Trapped Ion Quantum Information Group of ETH Zürich. Expressibility and entanglement capability calculation is partially based on code by Cenk Tüysüz.
+Originally developed by Till Muser at the Trapped Ion Quantum Information Group of ETH Zürich. Expressibility and entanglement capability calculation is partially based on code by Cenk Tüysüz.
 
 
 ## References
