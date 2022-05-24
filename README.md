@@ -9,7 +9,7 @@ Metrics for Variational Quantum Circuits/Parameterized Quantum Circuits/Quantum 
 
 Simply install this package from GitHub/`master` by running:
 
-```pip install https://github.com/till-m/triple_e/archive/master.zip```
+```pip install https://github.com/QML-HEP/triple_e/archive/master.zip```
 
 ## Usage
 This package aims to support both [Qiskit](https://qiskit.org/) and [PennyLane](https://pennylane.ai/).
