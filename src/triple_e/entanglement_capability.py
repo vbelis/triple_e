@@ -8,6 +8,7 @@ from qiskit.quantum_info import DensityMatrix, Statevector
 def entanglement_capability(circuit_simulator,
                             n_params,
                             n_shots=1000,
+                            data=None,
                             seed=None):
     """Computes entanglement capability for a circuit.
 
@@ -17,6 +18,9 @@ def entanglement_capability(circuit_simulator,
         n_params: The number of parameters circuit_simulator accepts. Presumed
             to be uniformly distributed in [0, 2pi]
         n_shots: How often the simulation should be repeated.
+        data: Array of data for the case of data-based expressibility computation. The 
+              values of the circuit parameters are sampled from the data distribution
+              instaed of uniformly from [0, 2pi].
 
     Returns:
         The expressiblity of the circuit.
@@ -28,7 +32,11 @@ def entanglement_capability(circuit_simulator,
     # estimate fidelities
     entanglements = []
     for _ in range(n_shots):
-        params = np.random.rand(n_params) * 2 * np.pi
+        if data is not None:
+            params = data[np.random.choice(data.shape[0], size=1)].flatten()
+        else:
+            params = np.random.rand(n_params) * 2 * np.pi
+        #params = np.random.rand(n_params) * 2 * np.pi
         rho = circuit_simulator(params)
 
         entanglements.append(entanglement_measure(rho))

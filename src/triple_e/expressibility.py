@@ -14,6 +14,7 @@ def expressibility(circuit_simulator,
                    seed=None,
                    n_bins=75,
                    return_histogram=False,
+                   data=None,
                    epstol=1e-18):
     """Computes expressibility for a circuit.
 
@@ -34,6 +35,9 @@ def expressibility(circuit_simulator,
         return_histogram: If `True`, additionally returns a tuple
             `(p_haar, p_circuit)`containing the normalized histogram data of the fidelity
             distributions.
+        data: Array of data for the case of data-based expressibility computation. The 
+              values of the circuit parameters are sampled from the data distribution
+              instaed of uniformly from [0, 2pi].
 
     Returns:
         The expressiblity of the circuit.
@@ -51,7 +55,11 @@ def expressibility(circuit_simulator,
 
     if method == "pairwise":
         for _ in range(n_shots):
-            params = np.random.rand(2, n_params) * 2 * np.pi
+            if data is not None:
+                raise NotImplementedError("No data-dependent implementation yet for the"
+                                          " 'pairwise' computing method.")
+            else:
+                params = np.random.rand(2, n_params) * 2 * np.pi
             rho1 = circuit_simulator(params[0])
             rho2 = circuit_simulator(params[1])
 
@@ -59,7 +67,10 @@ def expressibility(circuit_simulator,
     elif method == "full":
         samples = []
         while len(fidelities) < n_shots:
-            params = np.random.rand(n_params) * 2 * np.pi
+            if data is not None:
+                params = data[np.random.choice(data.shape[0], size=1)].flatten()
+            else:
+                params = np.random.rand(n_params) * 2 * np.pi
             rho1 = circuit_simulator(params)
 
             for smpl in samples:
