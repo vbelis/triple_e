@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Musser
+  given-names: Till
+- family-names: Belis
+  given-names: Vasilis
+  orcid: "https://orcid.org/0000-0001-5920-8998"
+title: "triple_e: Characterisation metrics package for parametrised quantum circuits"
+version: 0.1.1
+doi: 10.5281/zenodo.7643288
+date-released: 2023-02-15
+url: "https://github.com/vbelis/triple_e"
