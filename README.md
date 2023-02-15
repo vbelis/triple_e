@@ -1,5 +1,7 @@
 # triple_e
 
+[![DOI](https://zenodo.org/badge/{github_id}.svg)](https://zenodo.org/badge/latestdoi/{455096142})
+
 Metrics for Variational Quantum Circuits/Parameterized Quantum Circuits/Quantum Neural Networks.
 - Expressibility [[1]](#1)
 - Entanglement Capability [[1]](#1)
