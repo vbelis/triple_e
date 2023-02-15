@@ -10,7 +10,7 @@ def empirical_fisher(p, dp):
     p(x_i, y_i; theta) and it's derivate d/dtheta p(x_i, y_i; theta).
 
     Args:
-        p: np.ndarray of shape (m, k) with entries 
+        p: np.ndarray of shape (m, k) with entries
             [[p_11, p_12, ..., p_1k],
              [p_21, p_22, ..., p_2k],
               ... , ... , ..., ...  ,
@@ -23,9 +23,9 @@ def empirical_fisher(p, dp):
             [[J_11, J_12, ..., J_1d],
              [J_21, ...,  ..., J_2d],
                ..., ...,  ..., ....
-             [J_k1, J_k2, ..., J_kd]]        
+             [J_k1, J_k2, ..., J_kd]]
             where J_ji = d/dtheta_j p(x_i, y_i; theta_m)
-    
+
     Returns:
         np.ndarray of shape (M, d, d), where the m-th entry is the (d, d)
         empirical fisher information matrix associated with theta_m.
@@ -57,9 +57,9 @@ def empirical_fisher_(p, dp):
             [[J_11, J_12, ..., J_1d],
              [J_21, ...,  ..., J_2d],
                ..., ...,  ..., ....
-             [J_k1, J_k2, ..., J_kd]]        
+             [J_k1, J_k2, ..., J_kd]]
             where J_ji = d/dtheta_j p(x_i, y_i; theta)
-    
+
     Returns:
         Empirical Fisher information matrix, np.ndarray of shape (d, d).
 
@@ -73,12 +73,12 @@ def empirical_fisher_(p, dp):
     except IndexError:
         sum = 0
         for i in range(k):
-            sum += 1 / p[i]**2 * dp[i]**2
+            sum += 1 / p[i] ** 2 * dp[i] ** 2
         return np.array([sum / k])
 
     sum = np.zeros((d, d))
     for i in range(k):
-        sum += 1 / p[i]**2 * np.outer(dp[i], dp[i])
+        sum += 1 / p[i] ** 2 * np.outer(dp[i], dp[i])
     return sum / k
 
 
@@ -92,7 +92,7 @@ def normalised_fisher(p, dp):
     p(x_i, y_i; theta) and it's derivate d/dtheta p(x_i, y_i; theta).
 
     Args:
-        p: np.ndarray of shape (m, k) with entries 
+        p: np.ndarray of shape (m, k) with entries
             [[p_11, p_12, ..., p_1k],
              [p_21, p_22, ..., p_2k],
               ... , ... , ..., ...  ,
@@ -105,9 +105,9 @@ def normalised_fisher(p, dp):
             [[J_11, J_12, ..., J_1d],
              [J_21, ...,  ..., J_2d],
                ..., ...,  ..., ....
-             [J_k1, J_k2, ..., J_kd]]        
+             [J_k1, J_k2, ..., J_kd]]
             where J_ji = d/dtheta_j p(x_i, y_i; theta_m)
-    
+
     Returns:
         np.ndarray of shape (M, d, d), where the m-th entry is the (d, d)
         normalised empirical fisher information matrix associated with theta_m.
@@ -130,7 +130,7 @@ def effective_dimension_(p, dp, gamma):
     it's derivate d/dtheta p(x_i, y_i; theta).
 
     Args:
-        p: np.ndarray of shape (m, k) with entries 
+        p: np.ndarray of shape (m, k) with entries
             [[p_11, p_12, ..., p_1k],
              [p_21, p_22, ..., p_2k],
               ... , ... , ..., ...  ,
@@ -143,12 +143,12 @@ def effective_dimension_(p, dp, gamma):
             [[J_11, J_12, ..., J_1d],
              [J_21, ...,  ..., J_2d],
                ..., ...,  ..., ....
-             [J_k1, J_k2, ..., J_kd]]        
+             [J_k1, J_k2, ..., J_kd]]
             where J_ji = d/dtheta_j p(x_i, y_i; theta_m)
-    
+
     Returns:
         A float, the effective dimension.
-    
+
     Remarks:
         Mathematically speaking, this function calculates
         .. math::
@@ -168,6 +168,7 @@ def effective_dimension_(p, dp, gamma):
     # log(sqrt(det)) == log(det) / 2
     rootdet = np.linalg.slogdet(mat)[1] / 2  # slogdet is more stable than det
     add = np.log(np.sum(np.exp(rootdet))) - np.log(
-        M)  # normalized sum over parameter space
+        M
+    )  # normalized sum over parameter space
     result = 2 * add / np.log(gamma * k / (2 * np.pi * np.log(k)))
     return result

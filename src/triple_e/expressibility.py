@@ -6,16 +6,18 @@ from qiskit.quantum_info import state_fidelity, DensityMatrix
 from warnings import warn
 
 
-def expressibility(circuit_simulator,
-                   n_params,
-                   n_qubits=None,
-                   n_shots=1000,
-                   method="pairwise",
-                   seed=None,
-                   n_bins=75,
-                   return_histogram=False,
-                   data=None,
-                   epstol=1e-18):
+def expressibility(
+    circuit_simulator,
+    n_params,
+    n_qubits=None,
+    n_shots=1000,
+    method="pairwise",
+    seed=None,
+    n_bins=75,
+    return_histogram=False,
+    data=None,
+    epstol=1e-18,
+):
     """Computes expressibility for a circuit.
 
     Args:
@@ -23,7 +25,7 @@ def expressibility(circuit_simulator,
             Statevector or DensityMatrix.
         n_params: The number of parameters circuit_simulator accepts. Presumed
             to be uniformly distributed in [0, 2pi]
-        n_qubits: *DEPRECATED* Number of qubits of the circuit. 
+        n_qubits: *DEPRECATED* Number of qubits of the circuit.
         n_shots: How many fidelity samples to generate.
         method: Method to use to estimate fidelity:
             "pairwise": Generates two samples, calculates their fidelity.
@@ -35,7 +37,7 @@ def expressibility(circuit_simulator,
         return_histogram: If `True`, additionally returns a tuple
             `(p_haar, p_circuit)`containing the normalized histogram data of the fidelity
             distributions.
-        data: Array of data for the case of data-based expressibility computation. The 
+        data: Array of data for the case of data-based expressibility computation. The
               values of the circuit parameters are sampled from the data distribution
               instaed of uniformly from [0, 2pi].
 
@@ -56,8 +58,10 @@ def expressibility(circuit_simulator,
     if method == "pairwise":
         for _ in range(n_shots):
             if data is not None:
-                raise NotImplementedError("No data-dependent implementation yet for the"
-                                          " 'pairwise' computing method.")
+                raise NotImplementedError(
+                    "No data-dependent implementation yet for the"
+                    " 'pairwise' computing method."
+                )
             else:
                 params = np.random.rand(2, n_params) * 2 * np.pi
             rho1 = circuit_simulator(params[0])
@@ -81,20 +85,22 @@ def expressibility(circuit_simulator,
     else:
         raise ValueError("Invalid argument for method provided.")
 
-    if n_qubits is not None: #TODO: Actually remove this in the future ;)
+    if n_qubits is not None:  # TODO: Actually remove this in the future ;)
         warn(
-            "Supplying `n_qubits` manually is deprecated and will be removed" +
-            " in the future. The supplied value is ignored, and the correct" +
-            " value is inferred from the state returned by `circuit_simulator`"
-            + " instead.", DeprecationWarning)
+            "Supplying `n_qubits` manually is deprecated and will be removed"
+            + " in the future. The supplied value is ignored, and the correct"
+            + " value is inferred from the state returned by `circuit_simulator`"
+            + " instead.",
+            DeprecationWarning,
+        )
     n_qubits = DensityMatrix(rho1).num_qubits
 
     # Convert fidelities to a histogram
     fids, bin_edges = np.histogram(fidelities, bins=n_bins, range=(0, 1))
-    fids = (fids / sum(fids))  # normalize the histogram
+    fids = fids / sum(fids)  # normalize the histogram
 
     # Compute P_haar(F)
-    CDF_haar = -(1 - bin_edges)**(2**n_qubits - 1)
+    CDF_haar = -((1 - bin_edges) ** (2**n_qubits - 1))
     P_haar = np.array([CDF_haar[i + 1] - CDF_haar[i] for i in range(n_bins)])
     P_haar = P_haar / sum(P_haar)  # normalize
 
@@ -107,7 +113,8 @@ def expressibility(circuit_simulator,
         elif value > 0:
             warn(
                 "Dropping bin from calculation due to floating point accuracy."
-                + " KL-divergence may be underestimated.")
+                + " KL-divergence may be underestimated."
+            )
 
     if return_histogram:
         return D_kl, (P_haar, fids)
